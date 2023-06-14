@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link async="true" rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <label for="numberInput">
+        Check Value: <br>
+        (Decimal place will be ignored)
+    </label>
+    <input type="number" name="numberInput"/> <br>
+    <div id="numberResult">
+        <h2></h2>
+        <p></p>
+    </div>
+   
+    <script>
+        const numberInput = document.querySelector('input[type=number]');
+        const resultsDiv = document.querySelector('div[id=numberResult]');
+
+        function patternCheck(number){
+            const trimmed = Math.trunc(number), digitized = trimmed.toString().split(''), sums = [0];
+            for(const [index, digit] of digitized.entries()){
+                const power = Math.pow(digit, index+1);
+                sums[0] += power;
+            }
+            if(sums[0] % number === 0){
+                console.log('Pattern Followed');
+                const displays = resultsDiv.children;
+                const header = displays[0];
+                    header.innerHTML = 'Pattern Followed';
+                const body = displays[1];
+                    body.innerHTML = number;
+            }
+            return number;
+        }
+
+        numberInput.addEventListener('change', (event)=>{
+            const validatedNumber = patternCheck(numberInput.value);
+            
+        });
+
+    </script>
+</body>
+
+</html>

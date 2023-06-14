@@ -1,0 +1,36 @@
+[class*="col-"] {
+    padding: 10px;
+}
+
+.row{
+    margin: 0;
+}
+a {
+    text-decoration: none;
+    color: #c1cff1;
+    
+}
+table, th, td {
+    border: 1px solid #cdcdcd;
+    padding:5px;
+    background-color: #343434;
+  }
+body{
+    background-color: #272727;
+    color: #ffffff;
+    padding: 5%;
+}
+input[type=button]{
+    text-align: left;
+}
+#tileDiv{
+    height: 25vh;
+    width: 25vh;
+    background-color: black;
+    text-align: center;
+}
+#tileHeader{
+    color: white;
+    padding-top: 11.5vh;
+}
+
