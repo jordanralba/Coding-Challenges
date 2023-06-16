@@ -2,68 +2,230 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Personal Finances</title>
+        <title>Chess</title>
         <link async="true" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">  
         <link async="true" rel="stylesheet" href="style.css">
     </head>
     <body>
 
-        <div id="inputDiv">
-            <input type="text" name="userInput" id="userInput" placeholder="A1" />
-        </div>
-        <hr>
+        <div class="row" id="tileDiv">
+            <div class="row">
+                <div class="row col-4" id="westCol" ><h3 id="westHeader"></h3></div>
+                <div class="col-4"></div>
+                <div class="row col-4" id="northCol"><h3 id="northHeader">H8</h3></div>
+            </div>
+            <div class="row">
+                <div class="col-4"></div>
+                <div class="row col-4"><h2 id="tileHeader">A1</h2></div>
+                <div class="col-4"></div>
+            </div>
+            <div class="row">
+                <div class="row col-4" id="southCol" ><h3 id="southHeader"></h3></div>
+                <div class="col-4"></div>
+                <div class="row col-4" id="eastCol" ><h3 id="eastHeader"></h3></div>
+            </div>
 
-        <div id="tileDiv">
-            <h2 id="tileHeader">A1</h2>
+          
         </div>
+
+        <div class="row" id="inputDiv">
+            <div class="col-4"></div>
+            <label class="col-2" for="userInput">Tile Position:&nbsp;</label>
+            <input class="col-2" type="text" name="userInput" id="userInput" placeholder="a1/A1" />
+        </div>
+        
+        
 
         <div id="display"></div>
         <script>
             const uInput = document.getElementById('userInput');
-            const tHead = document.getElementById('tileHeader');
-            const tDiv = document.getElementById('tileDiv');
-            
-            class Tile {
-                constructor(column, row){
-                    this.column = column;
-                    this.row = row;
-                    if(this.column.includes('A') || this.column.includes('C') || this.column.includes('E') || this.column.includes('G')){
-                        if(this.row % 2 === 0){
-                            this.color = 'white';
-                        }else{
-                            this.color = 'black';
-                        }
-                    }else{
-                        if(this.row % 2 === 0){
-                            this.color = 'black';
-                        }else{
-                            this.color = 'white';
+            const cols = ['A','B','C','D','E','F','G','H'];    
+        //Just want to say you are dumb and made it harder by iterating instead of using maths
+            function north(column, row){
+                const diagonals = [];
+                let y = parseInt(row)
+                if(y!==8){
+                   for(let x=cols.indexOf(column);x<cols.length;x++){
+                        if(y <= cols.length){
+                            diagonals.push(cols[x]+(y))
+                            y++
                         }
                     }
+                    return diagonals//.slice(-1).toString() 
+                }else{
+                    return [column+row]
                 }
-                diagonals(){
-
+                
+            }function south(column, row){
+                const diagonals = [];
+                let y = parseInt(row)
+                if(y!==1){
+                    for(let x=cols.indexOf(column);x>=0;x--){
+                        if(y>0 && x < cols.length){
+                            diagonals.push(cols[x]+(y))
+                            y--
+                        }
+                    }
+                    return diagonals//.slice(-1).toString()
+                }else{
+                    return [column+row]
+                }
+            }
+            function east(column, row){
+                const diagonals = [];
+                let y=parseInt(row)
+                if(y!==1){
+                    for(let x=cols.indexOf(column);x<cols.length;x++){
+                        if(y>0){
+                            diagonals.push(cols[x]+(y));
+                            y--
+                        }
+                    }
+                    return diagonals//.slice(-1).toString()
+                }else{
+                    return [column+row]
+                }
+                
+            }function west(column, row){
+                const diagonals = [];
+                let y=parseInt(row)
+                if(y!==8){
+                    for(let x=cols.indexOf(column);x>=0;x--){
+                        if(y<=cols.length){
+                            diagonals.push(cols[x]+(y));
+                            y++
+                        }
+                    }
+                    return diagonals//.slice(-1).toString()
+                }else{
+                    return [column+row]
+                }
+            }
+            class Tile {
+                constructor(column, row){
+                    //this.column = column;
+                    //this.row = row;
+                    this.position = column + row;
+                    switch(column){
+                        case 'A': case 'C': case 'E': case 'G':
+                            if(row % 2 === 0){
+                                this.color = 'white';
+                            }else{
+                                this.color = 'black';
+                            } 
+                            break;
+                        default: 
+                            if(row % 2 === 0){
+                                this.color = 'black';
+                            }else{
+                                this.color = 'white';
+                            }
+                    }
+                    const northDiags = north(column, row);
+                    const southDiags = south(column, row);
+                    const eastDiags = east(column, row);
+                    const westDiags = west(column, row);
+                    const boundaryTiles = [northDiags.slice(-1).toString(),southDiags.slice(-1).toString(),eastDiags.slice(-1).toString(), westDiags.slice(-1).toString()];                    
+                    this.boundaries = boundaryTiles;                  
                 }
             }
             class Board {
-                cols = ['A','B','C','D','E','F','G','H'];
-                constructor(tiles){
-                    this.tiles = tiles;
+                constructor(){   
+                    for(const [row, column] of Object.entries(cols)){         
+                        this[row] = {};
+                        for(let i=0;i<cols.length;i++){
+                            this[cols.indexOf(column)][i] = new Tile(column, i+1);
+                        } 
+                    }
+                    console.log(this);                    
                 }
-            } 
-            uInput.addEventListener('change', ()=>{
-                const checkTile = uInput.value.split('');
-                const tile = new Tile(checkTile[0], checkTile[1]);
-                tHead.innerHTML = tile.column + tile.row;
-                if(tile.color === 'black'){
-                    tHead.style.color = 'white';
-                }else if(tile.color === 'white'){
-                    tHead.style.color = 'black';
+                
+            }
+            const chessBoard = new Board();
+            function updateTileDisplay(tile){
+                const tHead = document.getElementById('tileHeader');
+                const tDiv = document.getElementById('tileDiv');
+                const nHead = document.getElementById('northHeader');
+                const nCol = document.getElementById('northCol');
+                const sHead = document.getElementById('southHeader');
+                const sCol = document.getElementById('southCol');
+                const eHead = document.getElementById('eastHeader');
+                const eCol = document.getElementById('eastCol');
+                const wHead = document.getElementById('westHeader');
+                const wCol = document.getElementById('westCol');
+                
+                tHead.innerHTML = tile.position;
+                switch(tile.color){
+                    case 'black':tHead.style.color = 'white';
+                        nCol.style.borderColor = 'white';
+                        nHead.style.color = 'white';
+                        sCol.style.borderColor = 'white';
+                        sHead.style.color = 'white';
+                        eCol.style.borderColor = 'white';
+                        eHead.style.color = 'white';
+                        wCol.style.borderColor = 'white';
+                        wHead.style.color = 'white';
+                        break;
+                    case 'white':tHead.style.color = 'black';
+                        nCol.style.borderColor = 'black';
+                        nHead.style.color = 'black';
+                        sCol.style.borderColor = 'black';
+                        sHead.style.color = 'black';
+                        eCol.style.borderColor = 'black';
+                        eHead.style.color = 'black';
+                        wCol.style.borderColor = 'black';
+                        wHead.style.color = 'black';
+                        break;
                 }
                 tDiv.style.backgroundColor = tile.color;
-                console.log(tile);
+                for(const [index, boundary] of Object.entries(tile.boundaries)){
+                    switch(index){
+                        case '0':
+                            if(boundary!==tile.position){
+                                nHead.innerHTML = boundary;
+                                nCol.style.visibility = 'visible';
+                            }else{
+                                nCol.style.visibility = 'hidden';
+                            } 
+                            break;
+                        case '1': 
+                            if(boundary!==tile.position){
+                                sHead.innerHTML = boundary;
+                                sCol.style.visibility = 'visible';
+                            }else{
+                                sCol.style.visibility = 'hidden';
+                            }break;
+                        case '2': 
+                            if(boundary!==tile.position){
+                                eHead.innerHTML = boundary;
+                                eCol.style.visibility = 'visible';
+                            }else{
+                                eCol.style.visibility = 'hidden';
+                            }break;
+                        case '3': 
+                            if(boundary!==tile.position){
+                                wHead.innerHTML = boundary;
+                                wCol.style.visibility = 'visible';
+                            }else{
+                                wCol.style.visibility = 'hidden';
+                            }break;
+                    }
+
+                }
+                
+            }
+            uInput.addEventListener('change', ()=>{
+                const checkTile = uInput.value.toUpperCase();
+                const tile = chessBoard[cols.indexOf(checkTile[0])][parseInt(checkTile[1])-1];
+                updateTileDisplay(tile);
+
             });
-            const board = new Board()
+            
+            //Use Matrix to calculate all possible moves for player
+            //Create a Tile or Board display swap
+                
+
+
             
         </script>
     </body>

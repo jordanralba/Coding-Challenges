@@ -5,6 +5,7 @@
 .row{
     margin: 0;
 }
+
 a {
     text-decoration: none;
     color: #c1cff1;
@@ -18,19 +19,45 @@ table, th, td {
 body{
     background-color: #272727;
     color: #ffffff;
-    padding: 5%;
 }
 input[type=button]{
     text-align: left;
 }
 #tileDiv{
-    height: 25vh;
-    width: 25vh;
+    height: 33vh;
+    width: 33vh;
     background-color: black;
-    text-align: center;
+    margin: auto;
 }
-#tileHeader{
+#tileDiv>.row{
+    min-height: 33%;
+    padding: 0;
+}
+
+#tileHeader,#northHeader,#southHeader,#eastHeader,#westHeader{
     color: white;
-    padding-top: 11.5vh;
+    text-align: center;
+    margin: auto;
+}
+#northCol{
+    border-bottom: #ffffff 2px solid;
+    border-left: #ffffff 2px solid;
+    visibility: visible;
+}#southCol{
+    border-top: #ffffff 2px solid;
+    border-right: #ffffff 2px solid;
+    visibility: hidden;
+}#eastCol{
+    border-top: #ffffff 2px solid;
+    border-left: #ffffff 2px solid;
+    visibility: hidden;
+}#westCol{
+    border-bottom: #ffffff 2px solid;
+    border-right: #ffffff 2px solid;
+    visibility: hidden;
+}
+label{
+    font-size: 150%;
+    font-weight: Bold;
 }
 
