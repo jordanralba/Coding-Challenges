@@ -30,8 +30,10 @@
 
         <div class="row" id="inputDiv">
             <div class="col-4"></div>
-            <label class="col-2" for="userInput">Tile Position:&nbsp;</label>
-            <input class="col-2" type="text" name="userInput" id="userInput" placeholder="a1/A1" />
+            <!--label class="col-2" for="userInput">Tile Position:&nbsp;</label>
+            <input class="col-2" type="text" name="userInput" id="userInput" placeholder="a1/A1" /-->
+            <div class="col-4"><button class="btn btn-primary" onclick="getRandomTile()">Random Tile</button></div>
+            <div class="col-4"></div>
         </div>
         
         
@@ -125,8 +127,16 @@
                     const southDiags = south(column, row);
                     const eastDiags = east(column, row);
                     const westDiags = west(column, row);
+                    const northKnight = {north:north(column, row+1).slice(1, 2).toString(), west:west(column, row+1).slice(1, 2).toString()};
+                    const southKnight = {south:south(column, row-1).slice(1, 2).toString(), east:east(column, row-1).slice(1, 2).toString()};
+                    const eastKnight = {north:north(cols[cols.indexOf(column)+1], row).slice(1, 2).toString(), east:east(cols[cols.indexOf(column)+1], row).slice(1, 2).toString()};
+                    const westKnight = {west:west(cols[cols.indexOf(column)-1], row).slice(1, 2).toString(), south:south(cols[cols.indexOf(column)-1], row).slice(1, 2).toString()};
+                    const diagonals = {north:northDiags.slice(1), south:southDiags.slice(1), east:eastDiags.slice(1), west:westDiags.slice(1)};
                     const boundaryTiles = [northDiags.slice(-1).toString(),southDiags.slice(-1).toString(),eastDiags.slice(-1).toString(), westDiags.slice(-1).toString()];                    
-                    this.boundaries = boundaryTiles;                  
+                    this.diagonals = diagonals;
+                    this.boundaries = boundaryTiles;
+                    this.knightMoves = {up:northKnight, down:southKnight, left:westKnight, right:eastKnight};
+
                 }
             }
             class Board {
@@ -214,12 +224,15 @@
                 }
                 
             }
-            uInput.addEventListener('change', ()=>{
-                const checkTile = uInput.value.toUpperCase();
-                const tile = chessBoard[cols.indexOf(checkTile[0])][parseInt(checkTile[1])-1];
+            function getRandomInt(){
+                return Math.floor(Math.random() * 8);
+            }
+            function getRandomTile(){
+                //const checkTile = uInput.value.toUpperCase();
+                //const tile = chessBoard[cols.indexOf(checkTile[0])][parseInt(checkTile[1])-1];
+                const tile = chessBoard[getRandomInt()][getRandomInt()];
                 updateTileDisplay(tile);
-
-            });
+            }
             
             //Use Matrix to calculate all possible moves for player
             //Create a Tile or Board display swap
