@@ -29,11 +29,21 @@
         </div>
 
         <div class="row" id="inputDiv">
-            <div class="col-4"></div>
-            <!--label class="col-2" for="userInput">Tile Position:&nbsp;</label>
-            <input class="col-2" type="text" name="userInput" id="userInput" placeholder="a1/A1" /-->
-            <div class="col-4"><button class="btn btn-primary" onclick="getRandomTile()">Random Tile</button></div>
-            <div class="col-4"></div>
+            <div class="col-lg-4"></div>
+            <div class="col-auto" id="inputCol">
+                <div class="row">
+                    <div class="col-auto my-auto">
+                        <label for="userInput">Tile Position:&nbsp;</label>
+                        <input type="text" name="userInput" id="userInput" placeholder="a1/A1" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-auto" id="randomButtonCol">
+                        <button id="randomButton" class="btn btn-light my-auto" onclick="getRandomTile()"><h5>Random</h5></button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4"></div>
         </div>
         
         
@@ -236,10 +246,8 @@
             
             //Use Matrix to calculate all possible moves for player
             //Create a Tile or Board display swap
-                
-
-
-            
+            //React Js for DOM manipulation to make chessboard and highlight movements
+        
         </script>
     </body>
 </html>

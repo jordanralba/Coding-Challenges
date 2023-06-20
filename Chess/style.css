@@ -1,39 +1,33 @@
 [class*="col-"] {
     padding: 10px;
 }
-
-.row{
-    margin: 0;
-}
-
 a {
     text-decoration: none;
     color: #c1cff1;
     
 }
-table, th, td {
-    border: 1px solid #cdcdcd;
-    padding:5px;
-    background-color: #343434;
-  }
 body{
     background-color: #272727;
     color: #ffffff;
 }
-input[type=button]{
-    text-align: left;
-}
 #tileDiv{
-    height: 33vh;
-    width: 33vh;
+    height: 33vw;
+    width: 33vw;
+    min-width: 240px;
+    min-height: 240px;
     background-color: black;
     margin: auto;
 }
-#tileDiv>.row{
+#tileDiv>.row, #tileDiv>.row>.row{
     min-height: 33%;
     padding: 0;
 }
-
+#inputCol{
+    
+}
+.row{
+    margin: 0;
+}
 #tileHeader,#northHeader,#southHeader,#eastHeader,#westHeader{
     color: white;
     text-align: center;
@@ -60,4 +54,27 @@ label{
     font-size: 150%;
     font-weight: Bold;
 }
+#randomButton{    
+    max-width: 100%;
+    padding: 5px;
+}
+#userInput{
+    width: 50px;
+    max-height: 1.5em;
+}
+@media (max-width: 992px){   
+    #inputCol{
+        margin-right: auto!important;
+        margin-left: auto!important;
+        min-width: 33%;
+    }
+    [class*="col-lg"] {
+        visibility: hidden;
+        display: none;
+    }
+}
+h5{
+    margin: 0;
+}
+
 
