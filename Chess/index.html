@@ -238,15 +238,19 @@
                 return Math.floor(Math.random() * 8);
             }
             function getRandomTile(){
-                //const checkTile = uInput.value.toUpperCase();
-                //const tile = chessBoard[cols.indexOf(checkTile[0])][parseInt(checkTile[1])-1];
                 const tile = chessBoard[getRandomInt()][getRandomInt()];
                 updateTileDisplay(tile);
             }
+
+            uInput.addEventListener('change', ()=>{
+                const checkTile = uInput.value.toUpperCase();
+                const tile = chessBoard[cols.indexOf(checkTile[0])][parseInt(checkTile[1])-1];
+                updateTileDisplay(tile);
+            });
             
             //Use Matrix to calculate all possible moves for player
             //Create a Tile or Board display swap
-            //React Js for DOM manipulation to make chessboard and highlight movements
+            //React JS for DOM manipulation to make chessboard and highlight movements
         
         </script>
     </body>
