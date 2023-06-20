@@ -9,6 +9,7 @@ a {
 body{
     background-color: #272727;
     color: #ffffff;
+    padding: 5% 0;
 }
 #tileDiv{
     height: 33vw;
@@ -17,13 +18,11 @@ body{
     min-height: 240px;
     background-color: black;
     margin: auto;
+    border-radius: 25px;
 }
 #tileDiv>.row, #tileDiv>.row>.row{
     min-height: 33%;
     padding: 0;
-}
-#inputCol{
-    
 }
 .row{
     margin: 0;
@@ -37,18 +36,25 @@ body{
     border-bottom: #ffffff 2px solid;
     border-left: #ffffff 2px solid;
     visibility: visible;
+    border-bottom-left-radius: 15px;
 }#southCol{
     border-top: #ffffff 2px solid;
     border-right: #ffffff 2px solid;
     visibility: hidden;
+    border-top-right-radius: 15px;
+
 }#eastCol{
     border-top: #ffffff 2px solid;
     border-left: #ffffff 2px solid;
     visibility: hidden;
+    border-top-left-radius: 15px;
+
 }#westCol{
     border-bottom: #ffffff 2px solid;
     border-right: #ffffff 2px solid;
     visibility: hidden;
+    border-bottom-right-radius: 15px;
+
 }
 label{
     font-size: 150%;

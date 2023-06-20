@@ -51,70 +51,11 @@
         <div id="display"></div>
         <script>
             const uInput = document.getElementById('userInput');
-            const cols = ['A','B','C','D','E','F','G','H'];    
+            //const cols = ['A','B','C','D','E','F','G','H'];    
         //Just want to say you are dumb and made it harder by iterating instead of using maths
-            function north(column, row){
-                const diagonals = [];
-                let y = parseInt(row)
-                if(y!==8){
-                   for(let x=cols.indexOf(column);x<cols.length;x++){
-                        if(y <= cols.length){
-                            diagonals.push(cols[x]+(y))
-                            y++
-                        }
-                    }
-                    return diagonals//.slice(-1).toString() 
-                }else{
-                    return [column+row]
-                }
-                
-            }function south(column, row){
-                const diagonals = [];
-                let y = parseInt(row)
-                if(y!==1){
-                    for(let x=cols.indexOf(column);x>=0;x--){
-                        if(y>0 && x < cols.length){
-                            diagonals.push(cols[x]+(y))
-                            y--
-                        }
-                    }
-                    return diagonals//.slice(-1).toString()
-                }else{
-                    return [column+row]
-                }
-            }
-            function east(column, row){
-                const diagonals = [];
-                let y=parseInt(row)
-                if(y!==1){
-                    for(let x=cols.indexOf(column);x<cols.length;x++){
-                        if(y>0){
-                            diagonals.push(cols[x]+(y));
-                            y--
-                        }
-                    }
-                    return diagonals//.slice(-1).toString()
-                }else{
-                    return [column+row]
-                }
-                
-            }function west(column, row){
-                const diagonals = [];
-                let y=parseInt(row)
-                if(y!==8){
-                    for(let x=cols.indexOf(column);x>=0;x--){
-                        if(y<=cols.length){
-                            diagonals.push(cols[x]+(y));
-                            y++
-                        }
-                    }
-                    return diagonals//.slice(-1).toString()
-                }else{
-                    return [column+row]
-                }
-            }
             class Tile {
                 constructor(column, row){
+                    const cols = Board.cols;
                     //this.column = column;
                     //this.row = row;
                     this.position = column + row;
@@ -133,14 +74,14 @@
                                 this.color = 'white';
                             }
                     }
-                    const northDiags = north(column, row);
-                    const southDiags = south(column, row);
-                    const eastDiags = east(column, row);
-                    const westDiags = west(column, row);
-                    const northKnight = {north:north(column, row+1).slice(1, 2).toString(), west:west(column, row+1).slice(1, 2).toString()};
-                    const southKnight = {south:south(column, row-1).slice(1, 2).toString(), east:east(column, row-1).slice(1, 2).toString()};
-                    const eastKnight = {north:north(cols[cols.indexOf(column)+1], row).slice(1, 2).toString(), east:east(cols[cols.indexOf(column)+1], row).slice(1, 2).toString()};
-                    const westKnight = {west:west(cols[cols.indexOf(column)-1], row).slice(1, 2).toString(), south:south(cols[cols.indexOf(column)-1], row).slice(1, 2).toString()};
+                    const northDiags = this.north(column, row, cols);
+                    const southDiags = this.south(column, row, cols);
+                    const eastDiags = this.east(column, row, cols);
+                    const westDiags = this.west(column, row, cols);
+                    const northKnight = {north:this.north(column, row+1, cols).slice(1, 2).toString(), west:this.west(column, row+1, cols).slice(1, 2).toString()};
+                    const southKnight = {south:this.south(column, row-1, cols).slice(1, 2).toString(), east:this.east(column, row-1, cols).slice(1, 2).toString()};
+                    const eastKnight = {north:this.north(cols[cols.indexOf(column)+1], row, cols).slice(1, 2).toString(), east:this.east(cols[cols.indexOf(column)+1], row, cols).slice(1, 2).toString()};
+                    const westKnight = {west:this.west(cols[cols.indexOf(column)-1], row, cols).slice(1, 2).toString(), south:this.south(cols[cols.indexOf(column)-1], row, cols).slice(1, 2).toString()};
                     const diagonals = {north:northDiags.slice(1), south:southDiags.slice(1), east:eastDiags.slice(1), west:westDiags.slice(1)};
                     const boundaryTiles = [northDiags.slice(-1).toString(),southDiags.slice(-1).toString(),eastDiags.slice(-1).toString(), westDiags.slice(-1).toString()];                    
                     this.diagonals = diagonals;
@@ -148,17 +89,78 @@
                     this.knightMoves = {up:northKnight, down:southKnight, left:westKnight, right:eastKnight};
 
                 }
+                north(column, row, cols){
+                    const diagonals = [];
+                    let y = parseInt(row)
+                    if(y!==8){
+                    for(let x=cols.indexOf(column);x<cols.length;x++){
+                            if(y <= cols.length){
+                                diagonals.push(cols[x]+(y))
+                                y++
+                            }
+                        }
+                        return diagonals 
+                    }else{
+                        return [column+row]
+                    }
+                }
+                south(column, row, cols){
+                    const diagonals = [];
+                    let y = parseInt(row)
+                    if(y!==1){
+                        for(let x=cols.indexOf(column);x>=0;x--){
+                            if(y>0 && x < cols.length){
+                                diagonals.push(cols[x]+(y))
+                                y--
+                            }
+                        }
+                        return diagonals
+                    }else{
+                        return [column+row]
+                    }
+                }
+                east(column, row, cols){
+                    const diagonals = [];
+                    let y=parseInt(row)
+                    if(y!==1){
+                        for(let x=cols.indexOf(column);x<cols.length;x++){
+                            if(y>0){
+                                diagonals.push(cols[x]+(y));
+                                y--
+                            }
+                        }
+                        return diagonals
+                    }else{
+                        return [column+row]
+                    }
+                }
+                west(column, row, cols){
+                    const diagonals = [];
+                    let y=parseInt(row)
+                    if(y!==8){
+                        for(let x=cols.indexOf(column);x>=0;x--){
+                            if(y<=cols.length){
+                                diagonals.push(cols[x]+(y));
+                                y++
+                            }
+                        }
+                        return diagonals
+                    }else{
+                        return [column+row]
+                    }
+                }
             }
             class Board {
-                constructor(){   
-                    for(const [row, column] of Object.entries(cols)){         
+                constructor(){  
+                    for(const [row, column] of Object.entries(Board.cols)){         
                         this[row] = {};
-                        for(let i=0;i<cols.length;i++){
-                            this[cols.indexOf(column)][i] = new Tile(column, i+1);
+                        for(let i=0;i<Board.cols.length;i++){
+                            this[Board.cols.indexOf(column)][i] = new Tile(column, i+1);
                         } 
                     }
                     console.log(this);                    
                 }
+                static cols = ['A','B','C','D','E','F','G','H'];
                 
             }
             const chessBoard = new Board();
@@ -175,6 +177,7 @@
                 const wCol = document.getElementById('westCol');
                 
                 tHead.innerHTML = tile.position;
+
                 switch(tile.color){
                     case 'black':tHead.style.color = 'white';
                         nCol.style.borderColor = 'white';
@@ -197,7 +200,7 @@
                         wHead.style.color = 'black';
                         break;
                 }
-                tDiv.style.backgroundColor = tile.color;
+                    tDiv.style.backgroundColor = tile.color;
                 for(const [index, boundary] of Object.entries(tile.boundaries)){
                     switch(index){
                         case '0':
@@ -230,9 +233,7 @@
                                 wCol.style.visibility = 'hidden';
                             }break;
                     }
-
                 }
-                
             }
             function getRandomInt(){
                 return Math.floor(Math.random() * 8);
@@ -241,13 +242,11 @@
                 const tile = chessBoard[getRandomInt()][getRandomInt()];
                 updateTileDisplay(tile);
             }
-
             uInput.addEventListener('change', ()=>{
                 const checkTile = uInput.value.toUpperCase();
                 const tile = chessBoard[cols.indexOf(checkTile[0])][parseInt(checkTile[1])-1];
                 updateTileDisplay(tile);
-            });
-            
+            });  
             //Use Matrix to calculate all possible moves for player
             //Create a Tile or Board display swap
             //React JS for DOM manipulation to make chessboard and highlight movements
