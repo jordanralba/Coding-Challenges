@@ -244,7 +244,7 @@
             }
             uInput.addEventListener('change', ()=>{
                 const checkTile = uInput.value.toUpperCase();
-                const tile = chessBoard[cols.indexOf(checkTile[0])][parseInt(checkTile[1])-1];
+                const tile = chessBoard[Board.cols.indexOf(checkTile[0])][parseInt(checkTile[1])-1];
                 updateTileDisplay(tile);
             });  
             //Use Matrix to calculate all possible moves for player
