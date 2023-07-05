@@ -10,9 +10,9 @@
 
         <div class="row" id="tileDiv">
             <div class="row">
-                <div class="row col-4" id="westCol" ><h3 id="westHeader"></h3></div>
+                <div class="row col-4" id="westCol" ><h3 id="westHeader" hidden></h3></div>
                 <div class="col-4"></div>
-                <div class="row col-4" id="northCol"><h3 id="northHeader">H8</h3></div>
+                <div class="row col-4" id="northCol"><h3 id="northHeader" hidden>H8</h3></div>
             </div>
             <div class="row">
                 <div class="col-4"></div>
@@ -20,30 +20,57 @@
                 <div class="col-4"></div>
             </div>
             <div class="row">
-                <div class="row col-4" id="southCol" ><h3 id="southHeader"></h3></div>
-                <div class="col-4"></div>
-                <div class="row col-4" id="eastCol" ><h3 id="eastHeader"></h3></div>
+                <div class="row col-4" id="southCol" ><h3 id="southHeader" hidden></h3></div>
+                <div class="col-4 my-auto" id="randomButtonCol">
+                    <button id="randomButton" class="btn btn-light" onclick="getRandomTile()"><h5>New</h5></button>
+                </div>
+                <div class="row col-4" id="eastCol" ><h3 id="eastHeader" hidden></h3></div>
             </div>
 
           
         </div>
 
-        <div class="row" id="inputDiv">
+        <!--div class="row" id="inputDiv">
             <div class="col-lg-4"></div>
             <div class="col-auto" id="inputCol">
                 <div class="row">
+                    
+                </div>
+                <div class="row">
                     <div class="col-auto my-auto">
-                        <label for="userInput">Tile Position:&nbsp;</label>
+                        <label for="userInput">Choose Tile:&nbsp;</label>
                         <input type="text" name="userInput" id="userInput" placeholder="a1/A1" />
                     </div>
                 </div>
+                
+            </div>
+            <div class="col-lg-4"></div>
+        </div-->
+        <div class="row" id="directionalInputs">
+            <div class="col-lg-4"></div>
+            <div class="col-4" id="directionCol">
                 <div class="row">
-                    <div class="col-auto" id="randomButtonCol">
-                        <button id="randomButton" class="btn btn-light my-auto" onclick="getRandomTile()"><h5>Random</h5></button>
+                    <div class="col-md-6 my-auto">
+                        <label for="northInput">North:&nbsp;</label>
+                        <input type="text" name="northInput" id="northInput" placeholder="h8/H8">
+                    </div>
+                    <div class="col-md-6 my-auto">
+                        <label for="southInput">South:&nbsp;</label>
+                        <input type="text" name="southInput" id="southInput" placeholder="a1/A1">
+                    </div>
+                </div><div class="row">
+                    <div class="col-md-6 my-auto">
+                        <label for="eastInput">East:&nbsp;</label>
+                        <input type="text" name="eastInput" id="eastInput" placeholder="h1/H1">
+                    </div>
+                    <div class="col-md-6 my-auto">
+                        <label for="westInput">West:&nbsp;</label>
+                        <input type="text" name="westInput" id="westInput" placeholder="a8/A8">
                     </div>
                 </div>
             </div>
             <div class="col-lg-4"></div>
+
         </div>
         
         
@@ -51,6 +78,20 @@
         <div id="display"></div>
         <script>
             const uInput = document.getElementById('userInput');
+            const nInput = document.getElementById('northInput');
+            const sInput = document.getElementById('southInput');
+            const eInput = document.getElementById('eastInput');
+            const wInput = document.getElementById('westInput');
+            const tHead = document.getElementById('tileHeader');
+            const tDiv = document.getElementById('tileDiv');
+            const nHead = document.getElementById('northHeader');
+            const nCol = document.getElementById('northCol');
+            const sHead = document.getElementById('southHeader');
+            const sCol = document.getElementById('southCol');
+            const eHead = document.getElementById('eastHeader');
+            const eCol = document.getElementById('eastCol');
+            const wHead = document.getElementById('westHeader');
+            const wCol = document.getElementById('westCol');
             //const cols = ['A','B','C','D','E','F','G','H'];    
         //Just want to say you are dumb and made it harder by iterating instead of using maths
             class Tile {
@@ -165,18 +206,13 @@
             }
             const chessBoard = new Board();
             function updateTileDisplay(tile){
-                const tHead = document.getElementById('tileHeader');
-                const tDiv = document.getElementById('tileDiv');
-                const nHead = document.getElementById('northHeader');
-                const nCol = document.getElementById('northCol');
-                const sHead = document.getElementById('southHeader');
-                const sCol = document.getElementById('southCol');
-                const eHead = document.getElementById('eastHeader');
-                const eCol = document.getElementById('eastCol');
-                const wHead = document.getElementById('westHeader');
-                const wCol = document.getElementById('westCol');
+                
                 
                 tHead.innerHTML = tile.position;
+                nHead.hidden = true;
+                sHead.hidden = true;
+                eHead.hidden = true;
+                wHead.hidden = true;
 
                 switch(tile.color){
                     case 'black':tHead.style.color = 'white';
@@ -235,18 +271,63 @@
                     }
                 }
             }
+            let currentTile = chessBoard[0][0];
+            function boundaryCheck(direction){
+                switch(direction){
+                    case 'north': 
+                        if(nInput.value.toUpperCase() === currentTile.boundaries[0]){
+                            nHead.hidden = false;
+                        }else{
+                            nHead.hidden = true;
+                        }break;
+                    case 'south': 
+                        if(sInput.value.toUpperCase() === currentTile.boundaries[1]){
+                            sHead.hidden = false;
+                        }else{
+                            sHead.hidden = true;
+                        }break;
+                    case 'east': 
+                        if(eInput.value.toUpperCase() === currentTile.boundaries[2]){
+                            eHead.hidden = false;
+                        }else{
+                            eHead.hidden = true;
+                        }break;
+                    case 'west': 
+                        if(wInput.value.toUpperCase() === currentTile.boundaries[3]){
+                            wHead.hidden = false;
+                        }else{
+                            wHead.hidden = true;
+                        }break;
+                }
+            }
             function getRandomInt(){
                 return Math.floor(Math.random() * 8);
             }
             function getRandomTile(){
                 const tile = chessBoard[getRandomInt()][getRandomInt()];
+                currentTile = tile;
+                console.log(currentTile);
                 updateTileDisplay(tile);
             }
-            uInput.addEventListener('change', ()=>{
+            /*uInput.addEventListener('change', ()=>{
                 const checkTile = uInput.value.toUpperCase();
                 const tile = chessBoard[Board.cols.indexOf(checkTile[0])][parseInt(checkTile[1])-1];
+                currentTile = tile;
+                console.log(currentTile);
+
                 updateTileDisplay(tile);
-            });  
+            });*/
+            nInput.addEventListener('change', ()=>{
+                boundaryCheck('north');
+            });sInput.addEventListener('change', ()=>{
+                boundaryCheck('south');
+            });eInput.addEventListener('change', ()=>{
+                boundaryCheck('east');
+            });wInput.addEventListener('change', ()=>{
+                boundaryCheck('west');
+            });
+            
+
             //Use Matrix to calculate all possible moves for player
             //Create a Tile or Board display swap
             //React JS for DOM manipulation to make chessboard and highlight movements
