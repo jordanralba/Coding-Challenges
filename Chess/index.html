@@ -51,21 +51,21 @@
             <div class="col-4" id="directionCol">
                 <div class="row">
                     <div class="col-md-6 my-auto">
+                        <label for="westInput">West:&nbsp;</label>
+                        <input type="text" name="westInput" id="westInput" placeholder="a8/A8">
+                    </div>
+                    <div class="col-md-6 my-auto">
                         <label for="northInput">North:&nbsp;</label>
                         <input type="text" name="northInput" id="northInput" placeholder="h8/H8">
                     </div>
+                </div><div class="row">
                     <div class="col-md-6 my-auto">
                         <label for="southInput">South:&nbsp;</label>
                         <input type="text" name="southInput" id="southInput" placeholder="a1/A1">
                     </div>
-                </div><div class="row">
                     <div class="col-md-6 my-auto">
                         <label for="eastInput">East:&nbsp;</label>
                         <input type="text" name="eastInput" id="eastInput" placeholder="h1/H1">
-                    </div>
-                    <div class="col-md-6 my-auto">
-                        <label for="westInput">West:&nbsp;</label>
-                        <input type="text" name="westInput" id="westInput" placeholder="a8/A8">
                     </div>
                 </div>
             </div>
@@ -128,7 +128,6 @@
                     this.diagonals = diagonals;
                     this.boundaries = boundaryTiles;
                     this.knightMoves = {up:northKnight, down:southKnight, left:westKnight, right:eastKnight};
-
                 }
                 north(column, row, cols){
                     const diagonals = [];
@@ -202,7 +201,6 @@
                     console.log(this);                    
                 }
                 static cols = ['A','B','C','D','E','F','G','H'];
-                
             }
             const chessBoard = new Board();
             function updateTileDisplay(tile){
@@ -330,6 +328,8 @@
 
             //Use Matrix to calculate all possible moves for player
             //Create a Tile or Board display swap
+                //Play mode 
+                //Check all moves 
             //React JS for DOM manipulation to make chessboard and highlight movements
         
         </script>
