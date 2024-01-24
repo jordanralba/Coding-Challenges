@@ -155,9 +155,7 @@ function createBoard(board){
                 const boundaryTile = document.getElementById(boundary);
                 boundaryTile.style = 'background-color: red;';
             }for(knightMoveDirection of Object.values(thisTile.knightMoves)){
-                console.log(knightMoveDirection);
                 for(knightMove of Object.values(knightMoveDirection)){
-                    console.log(knightMove)
                     const knightMoveTile = document.getElementById(knightMove);
                     if(knightMoveTile) knightMoveTile.style = 'background-color: blue;';
                 }
@@ -169,9 +167,7 @@ function createBoard(board){
                 const boundaryTile = document.getElementById(boundary);
                 boundaryTile.style = '';
             }for(knightMoveDirection of Object.values(thisTile.knightMoves)){
-                console.log(knightMoveDirection);
                 for(knightMove of Object.values(knightMoveDirection)){
-                    console.log(knightMove)
                     const knightMoveTile = document.getElementById(knightMove);
                     if(knightMoveTile) knightMoveTile.style = '';
                 }
