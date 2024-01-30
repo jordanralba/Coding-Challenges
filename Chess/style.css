@@ -12,25 +12,34 @@ body{
 }
 .board{
     padding: 50px 62px;
+    transform: rotate(-90deg);
 }
 .col-tile{
+    transform: rotate(90deg);
     font-size: 150%;
     font-weight: Bold;
-    position: relative;
-    width: calc(100%/8);
-    height: 0;
-    padding-top: calc(100%/8);
+    display: flex;
+    max-width: 250px;
+    max-height: 250px;
     text-align: center;
     border: #000 solid 2px;
+    justify-content: center;
+    align-items: center;
 }
-.col-tile>*{
+.col-tile:before{
+    content: "";
+    display: block;
+    padding-top: 100%;  /* initial ratio of 1:1*/
+}
+/* .col-tile>*{
     position: absolute;
+    justify-self: center;
     margin-top: calc(-50% - 1.25rem/2);
-    /* top: 50%; */
+    top: 50%;
     left: 0;
-    /* bottom: 50%; */
+    bottom: 50%;
     right: 0;
-}
+} */
 .col-tile:hover{
     scale: 125%;
     z-index: 5;

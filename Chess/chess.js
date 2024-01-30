@@ -47,6 +47,7 @@ class Tile {
         const northKnight = {north:this.north(column, row+1, cols).slice(1, 2).toString(), west:this.west(column, row+1, cols).slice(1, 2).toString()};
         const southKnight = {south:this.south(column, row-1, cols).slice(1, 2).toString(), east:this.east(column, row-1, cols).slice(1, 2).toString()};
         const eastKnight = {north:this.north(cols[cols.indexOf(column)+1], row, cols).slice(1, 2).toString(), east:this.east(cols[cols.indexOf(column)+1], row, cols).slice(1, 2).toString()};
+        console.log(`${column} ${row}: `,eastKnight)
         const westKnight = {west:this.west(cols[cols.indexOf(column)-1], row, cols).slice(1, 2).toString(), south:this.south(cols[cols.indexOf(column)-1], row, cols).slice(1, 2).toString()};
         const diagonals = {north:northDiags.slice(1), south:southDiags.slice(1), east:eastDiags.slice(1), west:westDiags.slice(1)};
         const boundaryTiles = [northDiags.slice(-1).toString(),southDiags.slice(-1).toString(),eastDiags.slice(-1).toString(), westDiags.slice(-1).toString()];                    
@@ -57,8 +58,8 @@ class Tile {
     north(column, row, cols){
         const diagonals = [];
         let y = parseInt(row)
-        if(y!==8){
-        for(let x=cols.indexOf(column);x<cols.length;x++){
+        if(y!==8 && typeof column !== "undefined"){
+            for(let x=cols.indexOf(column? column:0);x<cols.length;x++){
                 if(y <= cols.length){
                     diagonals.push(cols[x]+(y))
                     y++
@@ -68,12 +69,13 @@ class Tile {
         }else{
             return [column+row]
         }
+
     }
     south(column, row, cols){
         const diagonals = [];
         let y = parseInt(row)
-        if(y!==1){
-            for(let x=cols.indexOf(column);x>=0;x--){
+        if(y!==1 && typeof column !== "undefined"){
+            for(let x=cols.indexOf(column? column:0);x>=0;x--){
                 if(y>0 && x < cols.length){
                     diagonals.push(cols[x]+(y))
                     y--
@@ -87,8 +89,8 @@ class Tile {
     east(column, row, cols){
         const diagonals = [];
         let y=parseInt(row)
-        if(y!==1){
-            for(let x=cols.indexOf(column);x<cols.length;x++){
+        if(y!==1 && typeof column !== "undefined"){
+            for(let x=cols.indexOf(column? column:0);x<cols.length;x++){
                 if(y>0){
                     diagonals.push(cols[x]+(y));
                     y--
@@ -102,8 +104,8 @@ class Tile {
     west(column, row, cols){
         const diagonals = [];
         let y=parseInt(row)
-        if(y!==8){
-            for(let x=cols.indexOf(column);x>=0;x--){
+        if(y!==8 && typeof column !== "undefined"){
+            for(let x=cols.indexOf(column? column:0);x>=0;x--){
                 if(y<=cols.length){
                     diagonals.push(cols[x]+(y));
                     y++
@@ -116,66 +118,63 @@ class Tile {
     }
 }
 class Board {
-    constructor(){  
-        for(const [row, column] of Object.entries(Board.cols)){         
+    constructor(target){
+        const setBoardAttribute = [
+        { class: 'board container-sm', children: []},
+        ];  
+        for(const [row, column] of Object.entries(Board.cols)){ 
+            const rowSetAttribute = {class: 'board-row row', id: row, children: []};
             this[row] = {};
             for(let i=0;i<Board.cols.length;i++){
-                this[Board.cols.indexOf(column)][i] = new Tile(column, i+1);
+                const tile = new Tile(column, i+1);
+                this[Board.cols.indexOf(column)][i] = tile
+                const tileSetAttribute = { id: tile.position, };
+                switch(tile.color){
+                    case 'black': tileSetAttribute['class'] = 'col-tile col tile-black'; break
+                    case 'white': tileSetAttribute['class'] = 'col-tile col tile-white'; break
+                }
+                rowSetAttribute.children.push(tileSetAttribute);
             } 
+            setBoardAttribute[0].children.push(rowSetAttribute);
         }
-        console.log(this);                    
+        populateNode(setBoardAttribute, null, target);
+        console.log(this);
+                            
     }
     static cols = ['A','B','C','D','E','F','G','H'];
-}
-const chessBoard = new Board();
-function createBoard(board){
-    const setAttribute = [
-        { class: 'board container-fluid', children: []},
-    ];
-    for(row of Object.entries(board)){
-        const rowSetAttribute = {class: 'board-row row', id: row[0], children: []};
-        for(tile of Object.entries(row[1])){
-            const tileSetAttribute = { id: tile[1].position, };
-            switch(tile[1].color){
-                case 'black': tileSetAttribute['class'] = 'col-tile col tile-black'; break
-                case 'white': tileSetAttribute['class'] = 'col-tile col tile-white'; break
-            }
-            rowSetAttribute.children.push(tileSetAttribute);
+    createDisplay(){
+        const tiles = document.getElementsByClassName('col-tile');
+        for(let tile of tiles){
+            tile.innerHTML = `<h5>${tile.id}</h5>`;
+            tile.addEventListener('mouseenter', (e)=>{
+                const thisTile = this[parseInt(e.target.parentElement.id)][parseInt(e.target.id[1]) - 1];
+                for(let boundary of thisTile.boundaries){
+                    const boundaryTile = document.getElementById(boundary);
+                    boundaryTile.style = 'background-color: red;';
+                }for(let knightMoveDirection of Object.values(thisTile.knightMoves)){
+                    for(let knightMove of Object.values(knightMoveDirection)){
+                        const knightMoveTile = document.getElementById(knightMove);
+                        if(knightMoveTile) knightMoveTile.style = 'background-color: blue;';
+                    }
+                }
+            });
+            tile.addEventListener('mouseleave', (e)=>{
+                const thisTile = this[parseInt(e.target.parentElement.id)][parseInt(e.target.id[1]) - 1];
+                for(let boundary of thisTile.boundaries){
+                    const boundaryTile = document.getElementById(boundary);
+                    boundaryTile.style = '';
+                }for(let knightMoveDirection of Object.values(thisTile.knightMoves)){
+                    for(let knightMove of Object.values(knightMoveDirection)){
+                        const knightMoveTile = document.getElementById(knightMove);
+                        if(knightMoveTile) knightMoveTile.style = '';
+                    }
+                }
+            });
         }
-        setAttribute[0].children.push(rowSetAttribute);
-    }
-    console.log(setAttribute);
-    populateNode(setAttribute, null, document.body);
-    const tiles = document.getElementsByClassName('col-tile');
-    for(tile of tiles){
-        tile.innerHTML = `<h5>${tile.id}</h5>`;
-        tile.addEventListener('mouseenter', (e)=>{
-            const thisTile = chessBoard[parseInt(e.target.parentElement.id)][parseInt(e.target.id[1]) - 1];
-            for(boundary of thisTile.boundaries){
-                const boundaryTile = document.getElementById(boundary);
-                boundaryTile.style = 'background-color: red;';
-            }for(knightMoveDirection of Object.values(thisTile.knightMoves)){
-                for(knightMove of Object.values(knightMoveDirection)){
-                    const knightMoveTile = document.getElementById(knightMove);
-                    if(knightMoveTile) knightMoveTile.style = 'background-color: blue;';
-                }
-            }
-        });
-        tile.addEventListener('mouseleave', (e)=>{
-            const thisTile = chessBoard[parseInt(e.target.parentElement.id)][parseInt(e.target.id[1]) - 1];
-            for(boundary of thisTile.boundaries){
-                const boundaryTile = document.getElementById(boundary);
-                boundaryTile.style = '';
-            }for(knightMoveDirection of Object.values(thisTile.knightMoves)){
-                for(knightMove of Object.values(knightMoveDirection)){
-                    const knightMoveTile = document.getElementById(knightMove);
-                    if(knightMoveTile) knightMoveTile.style = '';
-                }
-            }
-        });
     }
 }
-createBoard(chessBoard);
+const chessBoard = new Board(document.getElementById('display'));
+chessBoard.createDisplay();
 function boundaryCheck(direction, currentTile){
     switch(direction){
         case 'north': 
