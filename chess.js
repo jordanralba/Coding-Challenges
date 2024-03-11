@@ -19,41 +19,9 @@ function populateNode(attributes = [], children = null, parent = null) {
         else console.error('ERROR no children or parent provided for populateNode()')
     })
 }
-class Tile {
-    constructor(column, row){
-        const cols = Board.cols;
-        //this.column = column;
-        //this.row = row;
-        this.position = column + row;
-        switch(column){
-            case 'A': case 'C': case 'E': case 'G':
-                if(row % 2 === 0){
-                    this.color = 'white';
-                }else{
-                    this.color = 'black';
-                } 
-                break;
-            default: 
-                if(row % 2 === 0){
-                    this.color = 'black';
-                }else{
-                    this.color = 'white';
-                }
-        }
-        const northDiags = this.north(column, row, cols);
-        const southDiags = this.south(column, row, cols);
-        const eastDiags = this.east(column, row, cols);
-        const westDiags = this.west(column, row, cols);
-        const northKnight = {north:this.north(column, row+1, cols).slice(1, 2).toString(), west:this.west(column, row+1, cols).slice(1, 2).toString()};
-        const southKnight = {south:this.south(column, row-1, cols).slice(1, 2).toString(), east:this.east(column, row-1, cols).slice(1, 2).toString()};
-        const eastKnight = {north:this.north(cols[cols.indexOf(column)+1], row, cols).slice(1, 2).toString(), east:this.east(cols[cols.indexOf(column)+1], row, cols).slice(1, 2).toString()};
-        console.log(`${column} ${row}: `,eastKnight)
-        const westKnight = {west:this.west(cols[cols.indexOf(column)-1], row, cols).slice(1, 2).toString(), south:this.south(cols[cols.indexOf(column)-1], row, cols).slice(1, 2).toString()};
-        const diagonals = {north:northDiags.slice(1), south:southDiags.slice(1), east:eastDiags.slice(1), west:westDiags.slice(1)};
-        const boundaryTiles = [northDiags.slice(-1).toString(),southDiags.slice(-1).toString(),eastDiags.slice(-1).toString(), westDiags.slice(-1).toString()];                    
-        this.diagonals = diagonals;
-        this.boundaries = boundaryTiles;
-        this.knightMoves = {up:northKnight, down:southKnight, left:westKnight, right:eastKnight};
+class Piece {
+    constructor(color){
+        this.color = color;
     }
     north(column, row, cols){
         const diagonals = [];
@@ -116,6 +84,44 @@ class Tile {
             return [column+row]
         }
     }
+}
+class Tile {
+    constructor(column, row){
+        const cols = Board.cols;
+        //this.column = column;
+        //this.row = row;
+        this.position = column + row;
+        switch(column){
+            case 'A': case 'C': case 'E': case 'G':
+                if(row % 2 === 0){
+                    this.color = 'white';
+                }else{
+                    this.color = 'black';
+                } 
+                break;
+            default: 
+                if(row % 2 === 0){
+                    this.color = 'black';
+                }else{
+                    this.color = 'white';
+                }
+        }
+        const northDiags = this.north(column, row, cols);
+        const southDiags = this.south(column, row, cols);
+        const eastDiags = this.east(column, row, cols);
+        const westDiags = this.west(column, row, cols);
+        const northKnight = {north:this.north(column, row+1, cols).slice(1, 2).toString(), west:this.west(column, row+1, cols).slice(1, 2).toString()};
+        const southKnight = {south:this.south(column, row-1, cols).slice(1, 2).toString(), east:this.east(column, row-1, cols).slice(1, 2).toString()};
+        const eastKnight = {north:this.north(cols[cols.indexOf(column)+1], row, cols).slice(1, 2).toString(), east:this.east(cols[cols.indexOf(column)+1], row, cols).slice(1, 2).toString()};
+        console.log(`${column} ${row}: `,eastKnight)
+        const westKnight = {west:this.west(cols[cols.indexOf(column)-1], row, cols).slice(1, 2).toString(), south:this.south(cols[cols.indexOf(column)-1], row, cols).slice(1, 2).toString()};
+        const diagonals = {north:northDiags.slice(1), south:southDiags.slice(1), east:eastDiags.slice(1), west:westDiags.slice(1)};
+        const boundaryTiles = [northDiags.slice(-1).toString(),southDiags.slice(-1).toString(),eastDiags.slice(-1).toString(), westDiags.slice(-1).toString()];                    
+        this.diagonals = diagonals;
+        this.boundaries = boundaryTiles;
+        this.knightMoves = {up:northKnight, down:southKnight, left:westKnight, right:eastKnight};
+    }
+    
 }
 class Board {
     constructor(target){
